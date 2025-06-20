@@ -230,7 +230,7 @@ class RacePitStrategyEnv(gym.Env):
 
             # Track ellipse parameters
             self.center = (self.screen_size[0] // 2, self.screen_size[1] // 2)
-            self.track_radius = (300, 200) # Major/minor radii
+            self.track_radius = (350, 200) # Major/minor radii
 
         # Handle quit events
         for event in pygame.event.get():
@@ -243,7 +243,7 @@ class RacePitStrategyEnv(gym.Env):
         # Draw track
         pygame.draw.ellipse(
             self.screen,
-            (200, 200, 200), # Gray track surface
+            (90, 85, 80),
             (
                 self.center[0] - self.track_radius[0],
                 self.center[1] - self.track_radius[1],
@@ -278,7 +278,7 @@ class RacePitStrategyEnv(gym.Env):
         # Draw car
         pygame.draw.circle(
             self.screen,
-            (255, 0, 0), # Red car
+            (255, 0, 0),
             (int(x), int(y)),
             10
         )
