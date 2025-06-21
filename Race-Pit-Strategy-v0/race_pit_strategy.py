@@ -56,8 +56,8 @@ class RacePitStrategyEnv(gym.Env):
         self.num_laps = num_laps
         self.track_length = track_length
         self.max_speed = max_speed
-        # Minimum lap time is 115% of the fastest possible lap time (from NASCAR).
-        # Hence minimum speed is ~87% of the maximum speed.
+        # We will penalize the agent if the speed is below a certain threshold.
+        # Otherwise the agent may stop on the track and wait for the simulation to end.
         self.min_speed = max_speed / 1.15
         self.fuel_capacity = fuel_capacity
         self.fuel_consumption_rate = fuel_consumption_rate
