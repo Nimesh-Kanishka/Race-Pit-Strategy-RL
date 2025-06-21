@@ -56,8 +56,8 @@ class RacePitStrategyEnv(gym.Env):
         self.num_laps = num_laps
         self.track_length = track_length
         self.max_speed = max_speed
-        # We will penalize the agent if the speed is below a certain threshold.
-        # Otherwise the agent may stop on the track and wait for the simulation to end.
+        # We will penalize the agent if the speed is below a certain threshold. Otherwise the agent
+        # may stop on the track and wait for the simulation to end to minimize other penalties.
         self.min_speed = max_speed / 1.15
         self.fuel_capacity = fuel_capacity
         self.fuel_consumption_rate = fuel_consumption_rate
