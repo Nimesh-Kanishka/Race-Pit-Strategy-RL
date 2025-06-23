@@ -2,6 +2,7 @@
 
 A custom Gymnasium environment that simulates a car race. The goal is to finish the race as soon as possible. The RL agent has to balance going fast and conserving fuel/tires to achieve the best time possible.
 
+###
 
 v0: Initial version
 
