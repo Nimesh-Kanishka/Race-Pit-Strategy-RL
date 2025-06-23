@@ -88,7 +88,10 @@ class RacePitStrategyEnv(gym.Env):
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
 
+        # Reset state variables
         self._init_state()
+
+        self.render()
 
         return self._get_obs(), \
             self._get_info()
