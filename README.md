@@ -1,8 +1,8 @@
 # Race-Pit-Strategy-RL
 
-A custom Gymnasium environment that simulates a car race. The goal is to finish the race as soon as possible. The RL agent has to balance going fast and conserving fuel/tires to achieve the best time possible.
+A custom Gymnasium environment that simulates a car race (inspired by NASCAR oval races). The goal is to finish the race as soon as possible. The RL agent has to balance going fast and conserving fuel/tires to achieve the best time possible.
 
-###
+# Versions
 
 v0: Initial version
 
