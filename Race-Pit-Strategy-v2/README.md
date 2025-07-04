@@ -2,4 +2,4 @@
 
 [race_pit_strategy.py](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/blob/main/Race-Pit-Strategy-v2/race_pit_strategy.py): Contains the environment (structured similar to a [Pettingzoo](https://pettingzoo.farama.org/content/basic_usage/) environment).
 
-[train.py](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/blob/main/Race-Pit-Strategy-v2/train.py): Contains an example code to train an agent using Proximal Policy Optimization (PPO) algorithm (using [Stable Baselines 3](https://stable-baselines3.readthedocs.io/en/master/) and [SuperSuit](https://pypi.org/project/SuperSuit/) modules) and evaluate the trained agent against a random agent in the environment.
+[train.py](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/blob/main/Race-Pit-Strategy-v2/train.py): Contains an example code to train an agent using Proximal Policy Optimization (PPO) algorithm (using [Stable Baselines3](https://stable-baselines3.readthedocs.io/en/master/) and [SuperSuit](https://pypi.org/project/SuperSuit/) modules) and evaluate a trained agent against a random agent in a head-to-head race.
