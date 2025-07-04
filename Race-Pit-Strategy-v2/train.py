@@ -87,7 +87,7 @@ def eval(
                 # One agent will take random actions
                 if agent == env.possible_agents[0]:
                     action = env.action_space(agent).sample()
-                # Other agents will use the trained model
+                # Other agent will use the trained model
                 else:
                     action = model.predict(observation, deterministic=True)[0]
             env.step(action)
@@ -117,10 +117,10 @@ if __name__ == "__main__":
     env_fn = race_pit_strategy
     
     # Train a model
-    # train(env_fn, total_timesteps=20_480_000)
+    train(env_fn, total_timesteps=20_480_000)
 
     # Evaluate 10 episodes
-    # eval(env_fn, num_episodes=10, render=False, num_cars=2)
+    eval(env_fn, num_episodes=10, render=False, num_cars=2)
 
     # Watch an episode
     eval(env_fn, num_episodes=1, render=True, num_cars=2)
