@@ -3,6 +3,8 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import MlpPolicy
 import race_pit_strategy
+from agents.pit_strategy_agent import PitStrategyAgent
+from agents.random_agent import RandomAgent
 
 
 def train(
@@ -55,9 +57,17 @@ def eval(
     env_fn,
     num_episodes: int,
     render: bool = False,
+    other_agents: list[PitStrategyAgent] = [],
     **env_kwargs
 ):
-    env = env_fn.env(render_mode="human" if render else None, **env_kwargs)
+    # num_cars must at least be the number of other agents + 1 (the PPO agent)
+    if "num_cars" in env_kwargs:
+        num_cars = env_kwargs.pop("num_cars")
+        num_cars = len(other_agents) + 1 if num_cars <= len(other_agents) else num_cars
+    else:
+        num_cars = len(other_agents) + 1
+
+    env = env_fn.env(render_mode="human" if render else None, num_cars=num_cars, **env_kwargs)
 
     print(f"--- Starting Evaluation (env={str(env.metadata['name'])}, num_games={num_episodes}, render={render}) ---")
 
@@ -84,12 +94,16 @@ def eval(
                 action = None
             else:
                 total_length_per_agent[agent] += 1
-                # One agent will take random actions
-                if agent == env.possible_agents[0]:
-                    action = env.action_space(agent).sample()
-                # Other agent will use the trained model
+                # Find the index of the agent in the possible_agents list
+                agent_id = env.possible_agents.index(agent)
+                # For the first len(other_agents) agents, we get actions by calling
+                # the get_action method of the respective agent in other_agents list
+                if agent_id < len(other_agents):
+                    action = other_agents[agent_id].get_action(observation)
+                # For the last agent/s we use the trained model (PPO)
                 else:
                     action = model.predict(observation, deterministic=True)[0]
+                    
             env.step(action)
 
     env.close()
@@ -107,7 +121,7 @@ def eval(
     print("-" * 35)
     print("Agent  |  Avg Length  |  Avg Reward")
     for agent in env.possible_agents:
-        print(f"{agent}  |     {avg_length_per_agent[agent]:.0f}     |    {avg_reward_per_agent[agent]:.2f}")
+        print(f"{agent}  |     {avg_length_per_agent[agent]:04.0f}     |    {avg_reward_per_agent[agent]:.2f}")
     print("-" * 35)
 
     print(f"--- Finished Evaluation ---")
@@ -119,8 +133,12 @@ if __name__ == "__main__":
     # Train a model
     train(env_fn, total_timesteps=20_480_000)
 
+    other_agents = [
+        RandomAgent()
+    ]
+
     # Evaluate 10 episodes
-    eval(env_fn, num_episodes=10, render=False, num_cars=2)
+    eval(env_fn, num_episodes=10, render=False, other_agents=other_agents)
 
     # Watch an episode
-    eval(env_fn, num_episodes=1, render=True, num_cars=2)
+    eval(env_fn, num_episodes=1, render=True, other_agents=other_agents)
