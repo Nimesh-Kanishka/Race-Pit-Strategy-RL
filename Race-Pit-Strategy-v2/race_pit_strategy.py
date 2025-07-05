@@ -391,8 +391,12 @@ class parallel_env(ParallelEnv):
         font = pygame.font.SysFont(name="arial", size=18)
 
         # Draw headings
-        headings_text = font.render("Rank    Lap    Time    Speed    Fuel        Tires", True, (255, 255, 255))
+        headings_text = font.render("Rank    Car    Lap    Time    Speed    Fuel        Tires", True, (255, 255, 255))
         self.screen.blit(headings_text, (10, 2))
+
+        # We need this to determine where on screen to display each agent's information.
+        # We cannot use the place because there may be ties.
+        sorted_agents = sorted(self.agents, key=lambda agent: self.place[agent])
 
         for agent in self.agents:
             # Compute car position on ellipse
@@ -420,13 +424,13 @@ class parallel_env(ParallelEnv):
             )
 
             # Display agent information
-            agent_info = f"  {self.place[agent]:02d}       {(self.lap[agent] + 1):02d}       {self.lap_time[agent]:02d}       "
+            agent_info = f"  {self.place[agent]:02d}        {self.possible_agents.index(agent):02d}     {(self.lap[agent] + 1):02d}       {self.lap_time[agent]:02d}       "
             if self.in_pit[agent]:
                 agent_info += f"         In Pit: {self.pit_timer[agent]}/{self.pit_time[agent]}"
             else:
                 agent_info += f"{self.speed[agent]:05.2f}   {(self.fuel[agent] / self.fuel_capacity * 100):05.2f}%   {(self.tires[agent] * 100):05.2f}%"                
             agent_info_text = font.render(agent_info, True, color)
-            self.screen.blit(agent_info_text, (10, 20 * self.place[agent]))
+            self.screen.blit(agent_info_text, (10, 20 * (sorted_agents.index(agent) + 1)))
 
         pygame.display.flip()
         self.clock.tick(self.metadata.get("render_fps", 30))
