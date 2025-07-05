@@ -3,8 +3,8 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import MlpPolicy
 import race_pit_strategy
-from agents.pit_strategy_agent import PitStrategyAgent
-from agents.random_agent import RandomAgent
+from custom_agents.pit_strategy_agent import PitStrategyAgent
+from custom_agents.random_agent import RandomAgent
 
 
 def train(
