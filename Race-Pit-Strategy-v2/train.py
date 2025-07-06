@@ -5,6 +5,7 @@ from stable_baselines3.ppo import MlpPolicy
 import race_pit_strategy
 from custom_agents.pit_strategy_agent import PitStrategyAgent
 from custom_agents.random_agent import RandomAgent
+from custom_agents.custom_pit_agent import CustomPitAgent
 
 
 def train(
@@ -132,14 +133,17 @@ if __name__ == "__main__":
     env_fn = race_pit_strategy
     
     # Train a model
+    # Training for 20M timesteps takes ~90 minutes on my laptop (AMD Ryzen 7 7745HX CPU)
     train(env_fn, total_timesteps=20_480_000)
 
+    # We will evaluate the trained agent against a random agent and a custom agent acting on pre-defined logic
     other_agents = [
-        RandomAgent()
+        RandomAgent(),
+        CustomPitAgent(),
     ]
 
     # Evaluate 10 episodes
-    eval(env_fn, num_episodes=10, render=False, other_agents=other_agents)
+    eval(env_fn, num_episodes=10, render=False, other_agents=other_agents, max_episode_steps=10_000)
 
     # Watch an episode
-    eval(env_fn, num_episodes=1, render=True, other_agents=other_agents)
+    eval(env_fn, num_episodes=1, render=True, other_agents=other_agents, max_episode_steps=10_000)
