@@ -120,6 +120,7 @@ def eval(
 
     print("-" * 35)
     print("Agent  |  Avg Length  |  Avg Reward")
+    print("-" * 35)
     for agent in env.possible_agents:
         print(f"{agent}  |     {avg_length_per_agent[agent]:04.0f}     |    {avg_reward_per_agent[agent]:.2f}")
     print("-" * 35)
