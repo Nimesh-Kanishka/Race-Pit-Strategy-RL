@@ -4,7 +4,7 @@ A custom Gymnasium environment that simulates a car race (inspired by NASCAR ova
 
 # Versions
 
-[v3](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/tree/main/Race-Pit-Strategy-v3)
+[v3](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/tree/main/Race-Pit-Strategy-v3): Add caution periods (yellow flags) when cars stop on track and randomly (to add randomness to races)
 
 [v2](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/tree/main/Race-Pit-Strategy-v2): Change environment to have multiple agents (cars) racing each other at the same time (using [Pettingzoo](https://pettingzoo.farama.org/content/basic_usage/) module)
 
