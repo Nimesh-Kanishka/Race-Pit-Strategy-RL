@@ -1,4 +1,4 @@
-# Race Pit Strategy-v2
+# Race Pit Strategy-v3
 
 [race_pit_strategy.py](https://github.com/Nimesh-Kanishka/Race-Pit-Strategy-RL/blob/main/Race-Pit-Strategy-v2/race_pit_strategy.py): Contains the environment (structured similar to a [Pettingzoo](https://pettingzoo.farama.org/content/basic_usage/) environment).
 
