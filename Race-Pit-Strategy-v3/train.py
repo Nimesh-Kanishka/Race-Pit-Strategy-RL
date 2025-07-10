@@ -127,7 +127,7 @@ if __name__ == "__main__":
     env_fn = race_pit_strategy
     
     # Train a model
-    # train(env_fn, total_timesteps=40_000_000)
+    train(env_fn, total_timesteps=30_000_000)
 
     other_agents = [
         RandomAgent(),
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     ]
 
     # Evaluate 10 episodes
-    # eval(env_fn, num_episodes=10, render=False, other_agents=other_agents)
+    eval(env_fn, num_episodes=10, render=False, other_agents=other_agents)
 
     # Watch an episode
     eval(env_fn, num_episodes=1, render=True, other_agents=other_agents)
