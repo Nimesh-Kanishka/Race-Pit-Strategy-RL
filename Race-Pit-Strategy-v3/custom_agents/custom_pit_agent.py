@@ -11,7 +11,7 @@ class CustomPitAgent(PitStrategyAgent):
 
     def __init__(
         self,
-        fuel_threshold: float = 0.2,
+        fuel_threshold: float = 0.15,
         tire_threshold: float = 0.3
     ):
         super().__init__()
