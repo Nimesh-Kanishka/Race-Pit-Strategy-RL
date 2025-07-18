@@ -47,15 +47,15 @@ class parallel_env(ParallelEnv):
         render_mode: str | None = None,
         max_episode_steps: int | None = 5000,
         num_cars: int = 10,
-        num_laps: int = 50,
-        track_length: float = 2500.0,
-        max_speed: float = 75.0,
+        num_laps: int = 100,
+        track_length: float = 1000.0,
+        max_speed: float = 50.0,
         max_speed_under_caution: float = 20.0,
         fuel_capacity: float = 100.0,
         fuel_consumption_rate: float = 0.5,
         tire_wear_rate: float = 0.0015,
-        base_pit_stop_time: int = 15,
-        refuel_time_per_unit: float = 0.06,
+        base_pit_stop_time: int = 20,
+        refuel_time_per_unit: float = 0.1,
         tire_change_time: int = 10,
         caution_probability: float = 0.001
     ):
@@ -193,13 +193,13 @@ class parallel_env(ParallelEnv):
                 # As a car has stopped on track, the race will go under caution
                 if not self.under_caution:
                     self.under_caution = True
-                    self.laps_under_caution = np.random.randint(low=3, high=5)
+                    self.laps_under_caution = np.random.randint(low=5, high=10)
                     self.min_speed = self.max_speed_under_caution
 
         # Even if there are no cars stopped on track, the race will occasionally go under caution for randomness
         if not self.under_caution and np.random.random() < self.caution_probability:
             self.under_caution = True
-            self.laps_under_caution = np.random.randint(low=3, high=5)
+            self.laps_under_caution = np.random.randint(low=4, high=6)
             self.min_speed = self.max_speed_under_caution
         
         # Update the position of each car
@@ -226,7 +226,7 @@ class parallel_env(ParallelEnv):
                 max_speed = self.max_speed * ((0.55 * tires - 1.75) * tires + 1.9) * tires + 0.3
 
                 if self.under_caution and max_speed > self.max_speed_under_caution and (
-                    self.laps_under_caution > 2 or
+                    self.laps_under_caution > 3 or
                     (self.position[self.leader] - self.position[agent]) % self.track_length < max_speed
                 ):
                     max_speed_possible = self.max_speed_under_caution
@@ -280,9 +280,12 @@ class parallel_env(ParallelEnv):
                         self.in_pit[agent] = True
                         self.refuel_units[agent] = self.fuel_capacity * actions[agent][2]
                         self.change_tires[agent] = bool(np.round(actions[agent][3]))
-                        self.pit_time[agent] = self.base_pit_stop_time + \
-                            math.ceil(self.refuel_time_per_unit * self.refuel_units[agent]) + \
-                            self.tire_change_time * int(self.change_tires[agent])
+                        self.pit_time[agent] = math.ceil(
+                            self.base_pit_stop_time + max(
+                                self.refuel_time_per_unit * self.refuel_units[agent],
+                                self.tire_change_time * int(self.change_tires[agent])
+                            )
+                        )
 
                     # If we have finished a lap and continuing without pitting
                     else:
