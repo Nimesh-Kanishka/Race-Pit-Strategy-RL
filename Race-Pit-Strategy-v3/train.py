@@ -131,9 +131,10 @@ if __name__ == "__main__":
 
     other_agents = [
         RandomAgent(),
+        RandomAgent(),
+        CustomPitAgent(fuel_threshold=0.15, tire_threshold=0.3),
         CustomPitAgent(fuel_threshold=0.2, tire_threshold=0.3),
-        CustomPitAgent(fuel_threshold=0.25, tire_threshold=0.3),
-        CustomPitAgent(fuel_threshold=0.3, tire_threshold=0.3)
+        CustomPitAgent(fuel_threshold=0.25, tire_threshold=0.3)
     ]
 
     # Evaluate 10 episodes
