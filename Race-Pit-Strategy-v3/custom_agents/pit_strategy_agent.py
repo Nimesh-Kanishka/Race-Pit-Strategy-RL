@@ -12,6 +12,7 @@ class PitStrategyAgent(ABC):
         self.speed = None
         self.fuel = None
         self.tires = None
+        self.under_caution = None
         self.in_pit = None
         self.pit_timer = None
 
@@ -31,8 +32,9 @@ class PitStrategyAgent(ABC):
         self.speed = observation[5]
         self.fuel = observation[6]
         self.tires = observation[7]
-        self.in_pit = observation[8]
-        self.pit_timer = observation[9]
+        self.under_caution = observation[8]
+        self.in_pit = observation[9]
+        self.pit_timer = observation[10]
 
     def _create_action_array(self):
         return np.array(
