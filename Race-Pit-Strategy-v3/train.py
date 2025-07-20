@@ -118,7 +118,7 @@ def eval(
     print("Agent  |  Avg Length  |  Avg Reward")
     print("-" * 35)
     for agent in env.possible_agents:
-        print(f"{agent}  |     {avg_length_per_agent[agent]:04.0f}     |    {avg_reward_per_agent[agent]:.2f}")
+        print(f"{agent}  |     {avg_length_per_agent[agent]:04.0f}     |   {avg_reward_per_agent[agent]:.2f}")
     print("-" * 35)
 
     print(f"--- Finished Evaluation ---")
@@ -133,8 +133,14 @@ if __name__ == "__main__":
 
     other_agents = [
         RandomAgent(),
-        CustomPitAgentv1(),
-        CustomPitAgentv2()
+        RandomAgent(),
+        RandomAgent(),
+        CustomPitAgentv1(fuel_threshold=0.15),
+        CustomPitAgentv1(fuel_threshold=0.25),
+        CustomPitAgentv1(fuel_threshold=0.35),
+        CustomPitAgentv2(fuel_threshold=0.15),
+        CustomPitAgentv2(fuel_threshold=0.25),
+        CustomPitAgentv2(fuel_threshold=0.35)
     ]
 
     # Evaluate 10 episodes
