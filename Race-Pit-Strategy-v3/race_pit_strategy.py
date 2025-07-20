@@ -265,7 +265,8 @@ class parallel_env(ParallelEnv):
                         # Progress bonus
                         rewards[agent] += (distance - self.min_speed) / self.track_length
 
-                        terminations[agent] = True
+                        # The race will end for all agents as soon as the leader has crossed the finish line
+                        terminations = {agent: True for agent in self.agents}
 
                     # If we have finished a lap and pitting
                     elif bool(np.round(actions[agent][1])):
@@ -337,7 +338,8 @@ class parallel_env(ParallelEnv):
 
             # The distances to the nearest cars in front and behind will be set to None by default
             # (if no car is in front or behind)
-            self.distance_in_front[agent] = self.distance_behind[agent] = None
+            self.distance_in_front[agent] = None
+            self.distance_behind[agent] = None
 
             # If there is a car in front, calculate the distance to it
             for j in range(i - 1, -1, -1):
@@ -347,9 +349,10 @@ class parallel_env(ParallelEnv):
                     break
 
             # If there is a car behind, calculate the distance to it
-            for j in range(i + 1, len(sorted_agents)):
+            # If there are any other cars tied, distance_behind will be 0
+            for j in range(len(sorted_agents)):
                 a = sorted_agents[j]
-                if self.distance[a] < self.distance[agent]:
+                if (a != agent) and (self.distance[a] <= self.distance[agent]):
                     self.distance_behind[agent] = self.distance[agent] - self.distance[a]
                     break
 
@@ -446,7 +449,7 @@ class parallel_env(ParallelEnv):
         headings_text = font.render("Rank    Car    Lap    Time    Speed    Fuel        Tires", True, (255, 255, 255))
         self.screen.blit(headings_text, (10, 2))
 
-        for i, agent in enumerate(sorted(self.agents, key=lambda agent: self.place[agent])):
+        for i, agent in enumerate(sorted(self.agents, key=lambda agent: self.place[agent], reverse=True)):
             # Compute car position on ellipse
             frac = (self.position[agent] % self.track_length) / self.track_length
             angle = -2 * math.pi * frac - math.pi / 2
@@ -472,13 +475,13 @@ class parallel_env(ParallelEnv):
             )
 
             # Display agent information
-            agent_info = f"  {self.place[agent]:02d}        {self.possible_agents.index(agent):02d}     {(self.lap[agent] + 1):02d}       {self.lap_time[agent]:02d}       "
+            agent_info = f"  {self.place[agent]:02d}       {self.possible_agents.index(agent):02d}      {(self.lap[agent] + 1):02d}      {self.lap_time[agent]:03d}      "
             if self.in_pit[agent]:
                 agent_info += f"         In Pit: {self.pit_timer[agent]}/{self.pit_time[agent]}"
             else:
                 agent_info += f"{self.speed[agent]:05.2f}   {(self.fuel[agent] / self.fuel_capacity * 100):05.2f}%   {(self.tires[agent] * 100):05.2f}%"                
             agent_info_text = font.render(agent_info, True, color)
-            self.screen.blit(agent_info_text, (10, 20 * (i + 1)))
+            self.screen.blit(agent_info_text, (10, 20 * (len(self.agents) - i)))
 
         pygame.display.flip()
         self.clock.tick(self.metadata.get("render_fps", 30))
