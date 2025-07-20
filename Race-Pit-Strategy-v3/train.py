@@ -5,7 +5,8 @@ from stable_baselines3.ppo import MlpPolicy
 import race_pit_strategy
 from custom_agents.pit_strategy_agent import PitStrategyAgent
 from custom_agents.random_agent import RandomAgent
-from custom_agents.custom_pit_agent import CustomPitAgent
+from custom_agents.custom_pit_agent_v1 import CustomPitAgentv1
+from custom_agents.custom_pit_agent_v2 import CustomPitAgentv2
 
 
 def train(
@@ -81,11 +82,11 @@ def eval(
         env.reset()
 
         for agent in env.agent_iter():
-            observation, reward, termination, truncation, _ = env.last()
+            observation, reward, terminated, truncated, _ = env.last()
 
             total_reward_per_agent[agent] += reward
 
-            if termination or truncation:
+            if terminated or truncated:
                 action = None
             else:
                 total_length_per_agent[agent] += 1
@@ -127,14 +128,13 @@ if __name__ == "__main__":
     env_fn = race_pit_strategy
     
     # Train a model
+    # This takes ~2 hours on my laptop CPU (AMD Ryzen 7 7745HX)
     train(env_fn, total_timesteps=30_000_000)
 
     other_agents = [
         RandomAgent(),
-        RandomAgent(),
-        CustomPitAgent(fuel_threshold=0.15, tire_threshold=0.3),
-        CustomPitAgent(fuel_threshold=0.2, tire_threshold=0.3),
-        CustomPitAgent(fuel_threshold=0.25, tire_threshold=0.3)
+        CustomPitAgentv1(),
+        CustomPitAgentv2()
     ]
 
     # Evaluate 10 episodes
